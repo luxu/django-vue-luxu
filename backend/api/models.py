@@ -1,5 +1,4 @@
 from django.db import models
-from rest_framework import serializers
 
 
 class Message(models.Model):
@@ -7,7 +6,27 @@ class Message(models.Model):
     body = models.TextField()
 
 
-class MessageSerializer(serializers.HyperlinkedModelSerializer):
+class Pavilhao(models.Model):
+    numero = models.IntegerField()
+    capacidade = models.IntegerField(default=116)
+    restante = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'Pavilhão Habitacional {self.numero}'
+
     class Meta:
-        model = Message
-        fields = ('url', 'subject', 'body', 'pk')
+        verbose_name = 'Pavilhão'
+        verbose_name_plural = 'Pavilhões'
+        ordering = ['id']
+
+
+class Sentenciado(models.Model):
+    nome = models.CharField(max_length=30)
+    matricula = models.CharField(max_length=50)
+    pavilhao = models.ForeignKey(
+        Pavilhao,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f'Reeducando.: {self.nome}'
